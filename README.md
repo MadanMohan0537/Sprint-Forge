@@ -44,7 +44,37 @@ npm run dev      # local dev server
 npm run build    # production build to /dist
 ```
 
-Deploy: import the repo into [Vercel](https://vercel.com) — it auto-detects Vite. No environment variables needed.
+## Deploy to Cloudflare
+
+SprintForge is a frontend-only Vite SPA, so **Cloudflare Pages is the recommended and lowest-complexity option**. No Worker backend or environment variables are required. The repository also includes a Workers Static Assets configuration if you prefer Workers.
+
+### Cloudflare Pages (recommended)
+
+Connect this GitHub repository in **Workers & Pages → Create → Pages → Import an existing Git repository**, then configure:
+
+- Production branch: `main`
+- Build command: `npm run build`
+- Build output directory: `dist`
+- Node.js version: `20` or newer
+
+The committed `public/_redirects` file provides SPA fallback routing and `public/_headers` adds immutable asset caching and basic browser security headers.
+
+You can also deploy Pages from your terminal:
+
+```bash
+npm run deploy:pages
+```
+
+### Cloudflare Workers Static Assets
+
+The committed `wrangler.jsonc` serves `dist` as static assets and uses `single-page-application` fallback handling:
+
+```bash
+npx wrangler login
+npm run deploy:workers
+```
+
+Use Pages for the current frontend-only version. Move to Workers later only if you add server-side APIs, authentication middleware, or other edge logic.
 
 ## Architecture
 
