@@ -1,110 +1,111 @@
-# ⚡ SprintForge — Agile Sprint & Retrospective Tool with Fintech Compliance Tracking
+# ⚡ SprintForge — Agile Sprint & Retrospective Platform
 
-A single-page web app that runs the full Scrum loop — backlog grooming → sprint planning → live board → burndown/velocity analytics → AI-assisted retrospective — with a fintech twist: **compliance-flagged stories and an immutable audit trail** so regulated teams can ship product work and audit evidence from the same board.
+<p align="center">
+  <strong>Full-lifecycle Scrum workspace featuring real-time burndown analytics, AI-assisted retrospectives, and FinTech compliance tracking.</strong>
+</p>
 
-Built with **React 18 + Vite + Tailwind CSS + Recharts**. Frontend-only: demo data is seeded on first load and persisted to `localStorage`, so the app is fully interactive with zero backend.
+<p align="center">
+  <a href="https://portfolio.madanmohanlearning.workers.dev/"><img src="https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=flat-square" alt="Live Demo"></a>
+  <a href="#license"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License"></a>
+  <a href="https://react.dev"><img src="https://img.shields.io/badge/React-18-61dafb?style=flat-square" alt="React"></a>
+  <a href="https://vitejs.dev"><img src="https://img.shields.io/badge/Vite-5-646cff?style=flat-square" alt="Vite"></a>
+  <a href="https://recharts.org"><img src="https://img.shields.io/badge/Charts-Recharts-22b5bf?style=flat-square" alt="Recharts"></a>
+  <a href="https://pages.cloudflare.com"><img src="https://img.shields.io/badge/Deployment-Cloudflare%20Pages-f38020?style=flat-square" alt="Cloudflare Pages"></a>
+</p>
 
-## Features
+---
 
-### 1. Backlog Grooming
-- Story CRUD with **Fibonacci story points**, epics, assignees, and business value / effort scoring (1–5)
-- Backlog auto-ranked by **value density (value ÷ effort)** — a WSJF-lite prioritization heuristic
-- **2×2 Prioritization Matrix** view: Quick Wins / Big Bets / Fill-ins / Money Pits
-- One-click commit of a story into the active sprint
+## 📌 Overview
 
-### 2. Sprint Board (Kanban)
-- Drag-and-drop columns: To Do → In Progress → Review → Done
-- Every move updates the burndown **in real time** and writes to the audit trail
-- Double-click any card to edit scope, points, or compliance flags
+**SprintForge** is a modern, single-page Agile management application that runs the complete Scrum delivery loop — **backlog grooming $\rightarrow$ sprint planning $\rightarrow$ live Kanban execution $\rightarrow$ burndown & velocity analytics $\rightarrow$ AI-assisted retrospectives**.
 
-### 3. Burndown, Velocity & Forecasting
-- Live **burndown chart** (ideal vs actual) for the active sprint
-- **Velocity chart**: committed vs completed across past sprints, with a 3-sprint rolling average
-- **Forecast**: projects how many sprints the groomed backlog needs at current rolling velocity
+Engineered specifically with regulated enterprise environments in mind, SprintForge includes built-in **FinTech & Regulatory Compliance Story Tagging** (`SOX`, `GDPR`, `PCI-DSS`, `KYC/AML`, `Audit-Required`) and an **immutable append-only audit trail**, ensuring engineering teams capture audit evidence as a natural byproduct of sprint execution.
 
-### 4. AI Retrospective Generator
-Paste raw retro notes and get structured insights:
-- **Sentiment scoring** per observation (went well vs needs improvement)
-- **Theme clustering** across 9 agile failure modes (scope creep, dependencies, testing, estimation, …)
-- **Recurrence detection** — themes that appeared in past retros are flagged `↻ recurring` and escalated to P0
-- **Action items** with suggested owner, priority, and rationale
+---
 
-The engine is a deterministic NLP pipeline (`src/lib/retroEngine.js`) behind a single `generateInsights()` interface — `claudePromptFor()` builds a ready-to-use prompt so it can be swapped for the Claude API via a serverless function without touching the UI.
+## ✨ Key Features
 
-### 5. Compliance Sprint Tracker (fintech)
-- Stories taggable with **SOX, KYC/AML, PCI-DSS, GDPR** + a control reference (e.g. "PCI Req 3.4")
-- **Append-only audit trail**: every create/edit/status-change/descope is recorded with user + timestamp
-- **Audit-readiness %** per sprint and **CSV export** of the trail — the evidence format auditors actually ask for
+### 1. 📋 Backlog Grooming & 2×2 Prioritization
+- **Story Pointing & Value Density:** Assign Fibonacci story points, epics, assignees, and business value/effort scores (1–5). Automatically ranks stories by *Value Density (Value ÷ Effort)*.
+- **Interactive 2×2 Prioritization Matrix:** Visual trade-off mapping across *Quick Wins*, *Big Bets*, *Fill-ins*, and *Money Pits*.
+- **One-Click Sprint Commitment:** Seamlessly commit groomed backlog items directly into the active sprint.
 
-## Quick start
+### 2. 🗂️ Interactive Kanban Sprint Board
+- Drag-and-drop workflow across **To Do $\rightarrow$ In Progress $\rightarrow$ Review $\rightarrow$ Done**.
+- Real-time burndown point recalculation and state synchronization upon card transition.
+- In-place modal editing for story scope, story points, blockers, and compliance controls.
 
-```bash
-npm install
-npm run dev      # local dev server
-npm run build    # production build to /dist
+### 3. 📈 Burndown, Velocity & Forecasting Analytics
+- **Live Burndown Chart:** Real-time ideal vs. actual remaining story points.
+- **Velocity Chart:** Multi-sprint historical comparison (committed vs. completed points) with a 3-sprint rolling average.
+- **Sprint Forecasting:** Deterministic forecast projecting the number of sprints required to deliver remaining backlog scope.
+
+### 4. 🤖 AI-Powered Sprint Retrospective Engine
+- **Automated Observation Parsing:** Ingests unstructured retro feedback and categorizes sentiment into *What Went Well* vs. *What Needs Improvement*.
+- **Failure Mode Clustering:** Clusters blockers across 9 Agile failure modes (Scope Creep, Dependencies, Testing Gaps, Estimation, etc.).
+- **Recurrence Escalation:** Flags issues recurring across multiple sprints as `↻ recurring` and escalates them to P0.
+- **Action Item Synthesis:** AI generates actionable mitigation steps with clear ownership and priority.
+
+### 5. 🏦 FinTech & Regulatory Compliance Tracking
+- **Regulatory Tagging:** Flag stories with regulatory controls: `SOX`, `KYC/AML`, `PCI-DSS`, `GDPR`.
+- **Append-Only Audit Trail:** Immutable log recording all story creation, edits, status transitions, and descoping with timestamp and actor context.
+- **Audit-Readiness Export:** One-click CSV export of audit trails formatted for compliance officers.
+
+---
+
+## 🏗️ Architecture & Data Flow
+
+```mermaid
+flowchart LR
+    A[Backlog Grooming & 2x2 Matrix] --> B[Sprint Planning & Capacity]
+    B --> C[Kanban Board Drag & Drop]
+    C --> D[Real-time Recharts Burndown & Velocity]
+    D --> E[Regulatory Compliance & Audit Trail]
+    E --> F[AI Retrospective & Action Items Engine]
 ```
 
-## Deploy to Cloudflare
+---
 
-SprintForge is a frontend-only Vite SPA, so **Cloudflare Pages is the recommended and lowest-complexity option**. No Worker backend or environment variables are required. The repository also includes a Workers Static Assets configuration if you prefer Workers.
+## 🚀 Quick Start
 
-### Cloudflare Pages (recommended)
-
-Connect this GitHub repository in **Workers & Pages → Create → Pages → Import an existing Git repository**, then configure:
-
-- Production branch: `main`
-- Build command: `npm run build`
-- Build output directory: `dist`
-- Node.js version: `20` or newer
-
-The committed `public/_redirects` file provides SPA fallback routing and `public/_headers` adds immutable asset caching and basic browser security headers.
-
-You can also deploy Pages from your terminal:
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/MadanMohan0537/sprintforge.git
+cd sprintforge
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Production Build & Deployment
+
+```bash
+# Build production bundle to /dist
+npm run build
+
+# Deploy to Cloudflare Pages
 npm run deploy:pages
 ```
 
-### Cloudflare Workers Static Assets
+---
 
-The committed `wrangler.jsonc` serves `dist` as static assets and uses `single-page-application` fallback handling:
+## 🛠️ Tech Stack
 
-```bash
-npx wrangler login
-npm run deploy:workers
-```
+- **Frontend:** React 18, TailwindCSS
+- **Build Tool:** Vite 5
+- **Charts & Visualization:** Recharts
+- **State Management:** React Context + Custom Reducer with Immutable Audit Middleware
+- **Deployment:** Cloudflare Pages & Workers Static Assets
 
-Use Pages for the current frontend-only version. Move to Workers later only if you add server-side APIs, authentication middleware, or other edge logic.
+---
 
-## Architecture
+## 📄 License
 
-```
-src/
-├── App.jsx                  # shell + sidebar navigation
-├── store.jsx                # React context + reducer, localStorage persistence,
-│                            #   audit-log middleware (every mutation is logged)
-├── data/seed.js             # demo dataset: fintech payments team, 6 sprints
-├── lib/
-│   ├── forecast.js          # pure functions: burndown, velocity, forecasting
-│   └── retroEngine.js       # retro NLP pipeline + Claude API upgrade path
-└── components/              # one component per page + shared UI primitives
-```
-
-Design decisions worth noting:
-
-- **State as a single reducer with audit middleware.** Mutations flow through one reducer; audit entries are appended there, not in components — so the trail can't be bypassed. This mirrors how event-sourced fintech systems guarantee evidence integrity.
-- **Pure analytics functions.** Burndown/velocity/forecast math lives in `lib/forecast.js` with no React imports — testable and explainable.
-- **Relative seed dates.** Demo data is generated relative to "today", so the burndown always looks mid-sprint live, not stale.
-
-## Why this project (PM context)
-
-This was built to demonstrate product thinking, not just code:
-
-- **Scrum mechanics modeled correctly** — committed vs completed velocity, descope events, mid-sprint scope tracked as audit entries.
-- **Prioritization is opinionated** — value density ranking + a 2×2 matrix that forces explicit trade-off conversations.
-- **Retros that compound** — recurrence detection turns retrospectives from a ritual into a memory: a theme raised twice escalates automatically.
-- **Compliance as a first-class workflow** — in fintech, audit evidence is usually a quarterly scramble. Tying it to the board makes evidence a by-product of normal delivery.
-
-## License
-
-MIT
+MIT License — see [LICENSE](LICENSE) for details.
