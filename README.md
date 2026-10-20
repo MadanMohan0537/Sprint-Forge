@@ -1,119 +1,121 @@
-# ⚡ SprintForge — Agile Sprint & Retrospective Platform
+# Scrum Sprint & Retrospective Workspace (SprintForge)
 
-<p align="center">
-  <strong>Full-lifecycle Scrum workspace featuring real-time burndown analytics, rules-based retrospectives, and FinTech compliance tracking.</strong>
-</p>
+**A browser-based Scrum workspace covering backlog prioritization, commitment to the active sprint, a Kanban board, burndown and velocity analytics, rules-based retrospectives, and regulatory story tagging for finance teams.**
 
-<p align="center">
-  <a href="https://portfolio.madanmohanlearning.workers.dev/"><img src="https://img.shields.io/badge/Live%20Demo-Available-brightgreen?style=flat-square" alt="Live Demo"></a>
-  <a href="#license"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License"></a>
-  <a href="https://react.dev"><img src="https://img.shields.io/badge/React-18-61dafb?style=flat-square" alt="React"></a>
-  <a href="https://vitejs.dev"><img src="https://img.shields.io/badge/Vite-5-646cff?style=flat-square" alt="Vite"></a>
-  <a href="https://recharts.org"><img src="https://img.shields.io/badge/Charts-Recharts-22b5bf?style=flat-square" alt="Recharts"></a>
-  <a href="https://pages.cloudflare.com"><img src="https://img.shields.io/badge/Deployment-Cloudflare%20Pages-f38020?style=flat-square" alt="Cloudflare Pages"></a>
-</p>
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![React 18](https://img.shields.io/badge/React-18-61dafb)
+![Vite 5](https://img.shields.io/badge/Vite-5-646cff)
+![Recharts](https://img.shields.io/badge/Charts-Recharts-22b5bf)
+
+*The GitHub repository was previously named `sprintforge`. The npm package name and the Cloudflare Worker name in `wrangler.jsonc` are still `sprintforge`.*
 
 ---
 
-## First-run walkthrough and boundaries
+## The problem
 
-Add a story with points, value and effort, commit it to a sprint, move it through the board and inspect its analytics and audit entry. Then add retrospective observations and review the generated actions.
+Small teams practicing Scrum often juggle a spreadsheet backlog, a separate board, hand-drawn burndown charts, and retrospectives whose action items are forgotten by the next sprint. Teams in regulated domains (for example fintech) also need to show which stories touched controls such as SOX, PCI-DSS, GDPR, or KYC/AML.
 
-The retrospective engine is [deterministic JavaScript](src/lib/retroEngine.js), not an external language-model service. [Application state](src/store.jsx) is browser-local. A local audit list is editable by someone with browser/storage access; it is not a tamper-proof compliance ledger or proof of regulatory compliance.
+## Who it is for
 
-Run `npm run build` to verify the production bundle and `npm run preview` to inspect it locally. Use `npm run deploy:workers` or `npm run deploy:pages` for your chosen Cloudflare target after reviewing its configuration.
+Scrum Masters, product owners, and small delivery teams, especially ones learning Scrum or working in finance-adjacent environments, who want the whole sprint loop in one lightweight tool.
 
-## 📌 Overview
+## Approach
 
-**SprintForge** is a modern, single-page Agile management application that runs the complete Scrum delivery loop — **backlog grooming $\rightarrow$ sprint planning $\rightarrow$ live Kanban execution $\rightarrow$ burndown & velocity analytics $\rightarrow$ rules-based retrospectives**.
+The app runs the Scrum loop in one page: **backlog grooming → commit to the active sprint → Kanban execution → burndown and velocity analytics → retrospective → action items**.
 
-Engineered specifically with regulated enterprise environments in mind, SprintForge includes built-in **FinTech & Regulatory Compliance Story Tagging** (`SOX`, `GDPR`, `PCI-DSS`, `KYC/AML`, `Audit-Required`) and an **browser-local activity trail**, helping teams capture activity records as a natural byproduct of sprint execution.
+- **Prioritize by value density** (business value ÷ effort) and a 2×2 matrix (Quick Wins, Big Bets, Fill-ins, Money Pits).
+- **Make retrospectives stick:** a deterministic rules engine groups notes into nine themes (scope creep, communication, dependencies, testing, estimation, tooling, process, compliance, and workload), flags themes that already appeared in a saved retro, and proposes owned action items.
+- **Capture compliance context as a by-product** of normal sprint work through story tags and a local activity trail.
 
----
+## Features
 
-## ✨ Key Features
+### Backlog grooming and prioritization
+- Fibonacci story points (1, 2, 3, 5, 8, 13), epics, assignees, and value/effort scores (1–5), ranked by value density.
+- 2×2 prioritization matrix. High value is 3 or above; high effort is 3 or above.
+- One-click commitment of a groomed story onto the active sprint (`→ Sprint` on the list).
 
-### 1. 📋 Backlog Grooming & 2×2 Prioritization
-- **Story Pointing & Value Density:** Assign Fibonacci story points, epics, assignees, and business value/effort scores (1–5). Automatically ranks stories by *Value Density (Value ÷ Effort)*.
-- **Interactive 2×2 Prioritization Matrix:** Visual trade-off mapping across *Quick Wins*, *Big Bets*, *Fill-ins*, and *Money Pits*.
-- **One-Click Sprint Commitment:** Seamlessly commit groomed backlog items directly into the active sprint.
+### Kanban sprint board
+- Drag and drop across To Do → In Progress → Review → Done.
+- Today's burndown remaining point updates when a card moves to or from Done. Moves among the other columns do not change the chart.
+- Double-click a card to edit title, description, epic, assignee, points, value, effort, and compliance tag (plus an optional control reference). There is no blocker field.
 
-### 2. 🗂️ Interactive Kanban Sprint Board
-- Drag-and-drop workflow across **To Do $\rightarrow$ In Progress $\rightarrow$ Review $\rightarrow$ Done**.
-- Real-time burndown point recalculation and state synchronization upon card transition.
-- In-place modal editing for story scope, story points, blockers, and compliance controls.
+### Burndown, velocity, and forecasting
+- Ideal vs. actual burndown. The ideal line is a straight drop from the sprint's stored committed points to zero. Actual points for past days come from saved snapshots; today is committed points minus points in Done.
+- Velocity across completed sprints (committed vs. completed) with a 3-sprint rolling average.
+- Deterministic forecast of sprints needed to clear uncommitted backlog points at that rolling velocity (`src/lib/forecast.js`).
 
-### 3. 📈 Burndown, Velocity & Forecasting Analytics
-- **Live Burndown Chart:** Real-time ideal vs. actual remaining story points.
-- **Velocity Chart:** Multi-sprint historical comparison (committed vs. completed points) with a 3-sprint rolling average.
-- **Sprint Forecasting:** Deterministic forecast projecting the number of sprints required to deliver remaining backlog scope.
+### Rules-based retrospectives
+- Lists positive notes under *What went well*.
+- Groups negative and neutral notes into the nine themes above, shown under *Needs improvement*.
+- Marks a theme that already appears in a saved retro as `↻ recurring`, and raises that theme's action item to P0.
+- Generates up to four action items with owners and priorities.
 
-### 4. 🤖 Rules-Based Sprint Retrospective Engine
-- **Automated Observation Parsing:** Ingests unstructured retro feedback and categorizes sentiment into *What Went Well* vs. *What Needs Improvement*.
-- **Failure Mode Clustering:** Clusters blockers across 9 Agile failure modes (Scope Creep, Dependencies, Testing Gaps, Estimation, etc.).
-- **Recurrence Escalation:** Flags issues recurring across multiple sprints as `↻ recurring` and escalates them to P0.
-- **Action Item Synthesis:** The rule engine generates actionable mitigation steps with clear ownership and priority.
+The retrospective engine is [deterministic JavaScript](src/lib/retroEngine.js), **not** a language-model service. The screen is labeled "AI Retrospective" in the app; the running code does not call a model.
 
-### 5. 🏦 FinTech & Regulatory Compliance Tracking
-- **Regulatory Tagging:** Flag stories with regulatory controls: `SOX`, `KYC/AML`, `PCI-DSS`, `GDPR`.
-- **Append-Only Audit Trail:** Browser-local log recording all story creation, edits, status transitions, and descoping with timestamp and actor context.
-- **Audit-Readiness Export:** One-click CSV export of audit trails formatted for compliance officers.
+### Regulatory tagging and activity trail
+- Tag stories with `SOX`, `KYC/AML`, `PCI-DSS`, or `GDPR`.
+- Browser-local log of story creation, edits, status changes, sprint commits, and deletes, each with a timestamp.
+- CSV export of the activity trail (the rows currently shown, including any framework filter).
 
----
-
-## 🏗️ Architecture & Data Flow
+## Workflow
 
 ```mermaid
 flowchart LR
-    A[Backlog Grooming & 2x2 Matrix] --> B[Sprint Planning & Capacity]
-    B --> C[Kanban Board Drag & Drop]
-    C --> D[Real-time Recharts Burndown & Velocity]
-    D --> E[Regulatory Compliance & Audit Trail]
-    E --> F[AI Retrospective & Action Items Engine]
+    A[Backlog grooming and 2x2 matrix] --> B[Commit to the active sprint]
+    B --> C[Kanban board]
+    C --> D[Burndown and velocity charts]
+    C --> E[Compliance tags and activity trail]
+    D --> F[Rules-based retrospective and action items]
 ```
 
----
+## First-run walkthrough
 
-## 🚀 Quick Start
+1. Add a story with points, value, and effort.
+2. Commit it from the backlog list and drag it across the board. Move it to Done if you want today's burndown point to change.
+3. Open burndown and velocity. Velocity shows completed sprints already stored in the browser (seeded on first load). Open Compliance to see the new story's activity-trail entries.
+4. Add retrospective observations and review the generated actions.
 
-### Installation
+## Quick start
 
 ```bash
-# Clone the repository
-git clone https://github.com/MadanMohan0537/sprintforge.git
-cd sprintforge
-
-# Install dependencies
+git clone https://github.com/MadanMohan0537/scrum-sprint-retro-workspace.git
+cd scrum-sprint-retro-workspace
 npm install
-
-# Start development server
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Open [http://localhost:5173](http://localhost:5173).
 
-### Production Build & Deployment
+### Build and deploy
 
 ```bash
-# Build production bundle to /dist
-npm run build
-
-# Deploy to Cloudflare Pages
-npm run deploy:pages
+npm run build      # production bundle in dist/
+npm run preview    # inspect the build locally
+npm run deploy:workers   # Cloudflare Workers static assets (Worker name: sprintforge)
+npm run deploy:pages     # or Cloudflare Pages
 ```
 
----
+Review the configuration for your chosen Cloudflare target before deploying. `wrangler.jsonc` publishes the Worker as `sprintforge`.
 
-## 🛠️ Tech Stack
+## Tech stack
 
-- **Frontend:** React 18, TailwindCSS
-- **Build Tool:** Vite 5
-- **Charts & Visualization:** Recharts
-- **State Management:** React Context + Custom Reducer with Audit Middleware
-- **Deployment:** Cloudflare Pages & Workers Static Assets
+React 18, Tailwind CSS, Vite 5, Recharts, React Context with a reducer that appends activity-trail entries on story changes. Deployable to Cloudflare Pages or Workers static assets.
 
----
+## Limitations
 
-## 📄 License
+- All state is stored in the browser under the `localStorage` key `sprintforge-state-v1`. There are no accounts, sharing, or server persistence. If storage is unavailable, the session stays in memory.
+- There is no control to create, start, or close a sprint. The velocity chart and forecast use completed sprints already in that saved state.
+- Committing a story puts it on the board. It does not change the active sprint's stored committed-point total, which the burndown uses as its starting scope.
+- The activity trail is editable by anyone with access to the browser storage. It is **not** a tamper-proof compliance ledger and does not demonstrate regulatory compliance. New entries are attributed to a fixed demo user.
+- Retrospective categorization is keyword and sentiment rules and can misclassify feedback.
+- No automated tests or CI yet, and no usage data from real teams.
 
-MIT License — see [LICENSE](LICENSE) for details.
+## How I would evaluate it with a real team (not yet done)
+
+- Share of retrospective action items completed by the next sprint.
+- Forecast accuracy: predicted vs. actual sprints to finish a scoped backlog.
+- Whether recurring issues decline after escalation.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
