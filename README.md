@@ -86,20 +86,22 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173).
 
-### Build and deploy
+`npm run build` writes the production bundle to `dist/`. `npm run preview` serves that bundle locally.
+
+## Deployment
+
+Deploy to Cloudflare Workers with a direct `npx wrangler deploy`. The Worker name stays `sprintforge` (`wrangler.jsonc`), so an existing `workers.dev` hostname for that Worker does not change.
+
+`wrangler.jsonc` has no Worker script entry point, no secrets, and no bindings. It serves the Vite build as static assets from `./dist`, with single-page-application fallback (`not_found_handling`). Observability is enabled. Build first so `dist/` exists, then deploy:
 
 ```bash
-npm run build      # production bundle in dist/
-npm run preview    # inspect the build locally
-npm run deploy:workers   # Cloudflare Workers static assets (Worker name: sprintforge)
-npm run deploy:pages     # or Cloudflare Pages
+npm run build
+npx wrangler deploy
 ```
-
-Review the configuration for your chosen Cloudflare target before deploying. `wrangler.jsonc` publishes the Worker as `sprintforge`.
 
 ## Tech stack
 
-React 18, Tailwind CSS, Vite 5, Recharts, React Context with a reducer that appends activity-trail entries on story changes. Deployable to Cloudflare Pages or Workers static assets.
+React 18, Tailwind CSS, Vite 5, Recharts, React Context with a reducer that appends activity-trail entries on story changes. The Cloudflare Workers config publishes those static assets under the Worker name `sprintforge`.
 
 ## Limitations
 
